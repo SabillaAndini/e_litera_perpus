@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'favorit.dart';
 import 'homepage.dart';
+import 'notifikasi.dart';
 import 'pinjam.dart';
 import 'profile.dart';
 
@@ -15,26 +16,75 @@ class KategoriPage extends StatefulWidget {
 class _KategoriPageState extends State<KategoriPage> {
   int _selectedIndex = 1;
 
-  final List<Map<String, String>> kategoriData = [
-    {'title': ' Umum', 'imageUrl': 'assets/bgbuku1.jpg'},
-    {'title': 'Filsafat dan Psikologi', 'imageUrl': 'assets/bgbuku2.jpg'},
-    {'title': 'Sosial', 'imageUrl': 'assets/bgbuku3.jpg'},
-    {'title': 'Agama', 'imageUrl': 'assets/bgbuku4.jpg'},
-    {'title': 'Bahasa', 'imageUrl': 'assets/bgbuku5.jpg'},
-    {'title': 'Sains dan Matematika', 'imageUrl': 'assets/bgbuku6.jpg'},
-    {'title': 'Teknologi', 'imageUrl': 'assets/bgbuku7.jpg'},
-    {'title': 'Seni dan Rekreasi', 'imageUrl': 'assets/bgbuku8.jpg'},
-    {'title': 'Literatur dan Sastra', 'imageUrl': 'assets/bgbuku9.jpg'},
-    {'title': 'Sejarah dan Geografis', 'imageUrl': 'assets/bgbuku10.jpg'},
-    // Tambahkan data kategori lainnya sesuai kebutuhan
-  ];
-
-  final List<Map<String, String>> kategoriUmum = [
-    {'title': 'Publikasi Umum'},
-    {'title': 'Informasi Umum'},
-    {'title': 'Ensiklopedia'},
-    {'title': 'Biografi'},
-    {'title': 'Majalah'},
+  final List<Map<String, dynamic>> kategoriData = [
+    {
+      'title': 'Umum',
+      'imageUrl': 'assets/kategori1.jpeg',
+      'subkategori': [
+        {'title': 'Publikasi Umum'},
+        {'title': 'Informasi Umum'},
+        {'title': 'Ensiklopedia'},
+        {'title': 'Biografi'},
+        {'title': 'Majalah'},
+      ],
+    },
+    {
+      'title': 'Filsafat dan Psikologi',
+      'imageUrl': 'assets/kategori2.jpeg',
+      'subkategori': [
+        {'title': 'Isu Kesehatan Mental'},
+        {'title': 'Psikologi Positif'},
+        {'title': 'Psikologi dalam Filsafat'},
+        {'title': 'Filsafat Mindfulness'},
+        {'title': 'Psikologi Eksperimental'},
+        {'title': 'Filsafat Ontologi'},
+        {'title': 'Filsafat Epistemologi'},
+        {'title': 'Filsafat Aksiologi'},
+      ],
+    },
+    {
+      'title': 'Sosial',
+      'imageUrl': 'assets/kategori1.jpeg',
+      'subkategori': [
+        {'title': 'Sosiologi'},
+        {'title': 'Kesejahteraan Masyarakat'},
+        {'title': 'Politik dan Ekonomi'},
+        {'title': 'Budaya dan Identitas'},
+        {'title': 'Isu Kontemporer'},
+      ],
+    },
+    {
+      'title': 'Agama',
+      'imageUrl': 'assets/bgbuku.jpg',
+      'subkategori': [
+        {'title': 'Islam'},
+        {'title': 'Protestan dan Katolik'},
+        {'title': 'Hindu'},
+        {'title': 'Buddha'},
+        {'title': 'Konghucu'},
+      ],
+    },
+    {
+      'title': 'Bahasa',
+      'imageUrl': 'assets/bgbuku.jpg',
+      'subkategori': [
+        {'title': 'Tata Bahasa'},
+        {'title': 'Cerpen Indonesia'},
+        {'title': 'Bahasa Indonesia'},
+        {'title': 'Bahasa Asing'},
+      ],
+    },
+    {
+      'title': 'Sains dan Matematika',
+      'imageUrl': 'assets/kategori3.jpeg',
+      'subkategori': [
+        {'title': 'Sains'},
+        {'title': 'Matematika Dasar'},
+        {'title': 'Kimia'},
+        {'title': 'Kalkulus'},
+        {'title': 'Fisika'},
+      ],
+    },
   ];
 
   @override
@@ -54,13 +104,31 @@ class _KategoriPageState extends State<KategoriPage> {
           ),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.notifications_outlined,
-              color: const Color.fromARGB(255, 0, 0, 0),
-            ),
-            onPressed: () {},
-          )
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.notifications_outlined,
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                  size: 30,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NotifikasiPage()),
+                  );
+                },
+              ),
+              SizedBox(width: 5), // Penambahan jarak
+              CircleAvatar(
+                backgroundImage: AssetImage('assets/avatarprofile.png'),
+                radius: 20,
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 10,
+          ),
         ],
         automaticallyImplyLeading: false,
       ),
@@ -95,21 +163,21 @@ class _KategoriPageState extends State<KategoriPage> {
                               print(result);
                             },
                             itemBuilder: (BuildContext context) =>
-                                kategoriUmum.map((data) {
+                                (data['subkategori']
+                                        as List<Map<String, String>>)
+                                    .map((subkategoriData) {
                               return PopupMenuItem<String>(
-                                value: data['title']!,
-                                child: Text(data['title']!),
+                                value: subkategoriData['title']!,
+                                child: Text(subkategoriData['title']!),
                               );
                             }).toList(),
                           ),
                         ),
-                        // Tambahkan elemen-elemen lain di sini, contohnya gambar
                         Image.asset(
-                          data['imageUrl']!, // Menggunakan imageUrl dari data
+                          data['imageUrl']!,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
-                        // Tambahan elemen-elemen lain sesuai kebutuhan
                       ],
                     ),
                   ),

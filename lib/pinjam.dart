@@ -2,6 +2,7 @@ import 'package:e_litera_perpus/favorit.dart';
 import 'package:flutter/material.dart';
 import 'homepage.dart';
 import 'kategori.dart';
+import 'notifikasi.dart';
 import 'profile.dart';
 
 class PinjamPage extends StatefulWidget {
@@ -21,6 +22,24 @@ class _PinjamPageState extends State<PinjamPage> {
     'assets/buku_3.png',
     'assets/buku_4.png',
     'assets/buku_5.png',
+  ];
+
+  List<String> bookTitles = [
+    'Help Me Find My Stomach',
+    'The Adventure Begins',
+    'Mystery of the Moon',
+    'Magic of the Amazing Forest',
+    'Put The Petal To The Metal',
+    'In the Shadows Monster'
+  ];
+
+  List<String> bookSBorrow = [
+    'Pengembalian : 29/02/2024',
+    'Pengembalian : 20/01/2024',
+    'Pengembalian : 12/01/2024',
+    'Pengembalian : 02/02/2024',
+    'Pengembalian : 10/01/2024',
+    'Pengembalian : 05/02/2024'
   ];
 
   // Menyimpan status favorit dan status peminjaman setiap item
@@ -67,7 +86,46 @@ class _PinjamPageState extends State<PinjamPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daftar Buku Dipinjam'),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/elitera.png',
+                height: 30,
+              ),
+              SizedBox(width: 10),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.notifications_outlined,
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                  size: 30,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NotifikasiPage()),
+                  );
+                },
+              ),
+              SizedBox(width: 5), // Penambahan jarak
+              CircleAvatar(
+                backgroundImage: AssetImage('assets/avatarprofile.png'),
+                radius: 20,
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 10,
+          ),
+        ],
+        automaticallyImplyLeading: false,
       ),
       body: ListView.builder(
         padding: EdgeInsets.only(top: 30, left: 10, right: 10),
@@ -102,7 +160,7 @@ class _PinjamPageState extends State<PinjamPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Remembers what user said earlier in the conversation',
+                          bookTitles[item],
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -110,11 +168,13 @@ class _PinjamPageState extends State<PinjamPage> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 8),
                         Text(
-                          'Hello everyone, back again at sahretech. On this occasion, we will learn',
-                          style: TextStyle(fontSize: 12),
-                          maxLines: 3,
+                          bookSBorrow[item],
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 8),

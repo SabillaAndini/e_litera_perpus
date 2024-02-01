@@ -24,13 +24,13 @@ class _HomePageState extends State<HomePage> {
     'assets/buku_6.png',
   ];
 
-  List<int> bookRatings = [4, 4, 4, 4, 4, 4];
+  List<int> bookRatings = [4, 3, 4, 4, 4, 4];
 
   List<String> bookTitles = [
     'Help Me Find My Stomach',
     'The Adventure Begins',
     'Mystery of the Moon',
-    'Magic of the Forest',
+    'Magic of the Amazing Forest',
     'Put The Petal To The Metal',
     'In the Shadows Monster'
   ];
@@ -52,18 +52,31 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.notifications_outlined,
-              color: const Color.fromARGB(255, 0, 0, 0),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotifikasiPage()),
-              );
-            },
-          )
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.notifications_outlined,
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                  size: 30,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NotifikasiPage()),
+                  );
+                },
+              ),
+              SizedBox(width: 5), // Penambahan jarak
+              CircleAvatar(
+                backgroundImage: AssetImage('assets/avatarprofile.png'),
+                radius: 20,
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 10,
+          ),
         ],
         automaticallyImplyLeading: false,
       ),
@@ -75,7 +88,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                   margin: const EdgeInsets.only(top: 20),
-                  width: 280,
+                  width: 300,
                   height: 50,
                   child: TextField(
                     autocorrect: false,
@@ -103,14 +116,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.filter_list))
               ],
             ),
           ),
           SizedBox(height: 10),
           Container(
             width: 400,
-            height: 200,
+            height: 100,
             child: Image.asset(
               'assets/homepage.png',
               fit: BoxFit.cover,
@@ -187,8 +199,9 @@ class _HomePageState extends State<HomePage> {
                                     index < rating
                                         ? Icons.star
                                         : Icons.star_border,
-                                    color:
-                                        index < 4 ? Colors.yellow : Colors.grey,
+                                    color: index < rating
+                                        ? Colors.yellow
+                                        : Colors.grey,
                                     size: 18,
                                   ),
                                 ),

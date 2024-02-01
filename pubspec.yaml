@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: ^1.0.7
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -75,6 +76,13 @@ flutter:
     - assets/gambar_1.png
     - assets/avatarprofile.png
     - assets/bgbuku.jpg
+    - assets/kategoribg.jpg
+    - assets/kategori1.jpeg
+    - assets/kategori2.jpeg
+    - assets/kategori3.jpeg
+    - assets/google-logo.png
+    - assets/no_profile.png
+    - assets/profile_1.jpg
     
     
 
