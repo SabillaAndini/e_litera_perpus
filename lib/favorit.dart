@@ -36,7 +36,7 @@ class _FavoritPageState extends State<FavoritPage> {
     return Scaffold(
       appBar: AppBar(
         title: Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 8),
           child: Row(
             children: [
               Image.asset('assets/elitera.png', height: 30),

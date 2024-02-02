@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:e_litera_perpus/denda.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'kategori.dart';
@@ -38,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
       home: Scaffold(
         appBar: AppBar(
           title: Padding(
-            padding: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 8),
             child: Row(
               children: [
                 Image.asset(
@@ -134,7 +135,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(
                     width: 200,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DendaPage()),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xffC25B4A),
                         side: BorderSide.none,

@@ -87,7 +87,7 @@ class _PinjamPageState extends State<PinjamPage> {
     return Scaffold(
       appBar: AppBar(
         title: Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 8),
           child: Row(
             children: [
               Image.asset(
@@ -247,7 +247,7 @@ class _PinjamPageState extends State<PinjamPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book_outlined),
-            label: 'Pinjam',
+            label: 'Rak Pinjam',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

@@ -1,11 +1,13 @@
-import 'package:e_litera_perpus/favorit.dart';
-import 'package:e_litera_perpus/kategori.dart';
-import 'package:e_litera_perpus/notifikasi.dart';
-import 'package:e_litera_perpus/pinjam.dart';
-import 'package:e_litera_perpus/profile.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'detail.dart';
+import 'favorit.dart';
+import 'kategori.dart';
+import 'notifikasi.dart';
+import 'pinjam.dart';
+import 'profile.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,19 +16,36 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  TextEditingController _searchController = TextEditingController();
+  List<String> filteredBookTitles = List.from(bookTitles);
 
-  List<String> bookImages = [
-    'assets/buku_1.png',
-    'assets/buku_2.png',
-    'assets/buku_3.png',
-    'assets/buku_4.png',
-    'assets/buku_5.png',
-    'assets/buku_6.png',
-  ];
+  File? _selectedImage;
+  bool _isImageSelected = false;
+
+  Future<void> _pickImage() async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        _isImageSelected = true;
+      });
+    }
+  }
+
+  Map<String, String> bookImagesMap = {
+    'Help Me Find My Stomach': 'assets/buku_1.png',
+    'The Adventure Begins': 'assets/buku_2.png',
+    'Mystery of the Moon': 'assets/buku_3.png',
+    'Magic of the Amazing Forest': 'assets/buku_4.png',
+    'Put The Petal To The Metal': 'assets/buku_5.png',
+    'In the Shadows Monster': 'assets/buku_6.png',
+  };
 
   List<int> bookRatings = [4, 3, 4, 4, 4, 4];
 
-  List<String> bookTitles = [
+  static List<String> bookTitles = [
     'Help Me Find My Stomach',
     'The Adventure Begins',
     'Mystery of the Moon',
@@ -40,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 8),
           child: Row(
             children: [
               Image.asset(
@@ -67,11 +86,16 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              SizedBox(width: 5), // Penambahan jarak
-              CircleAvatar(
-                backgroundImage: AssetImage('assets/avatarprofile.png'),
-                radius: 20,
-              ),
+              SizedBox(width: 5),
+              _isImageSelected
+                  ? CircleAvatar(
+                      backgroundImage: FileImage(_selectedImage!),
+                      radius: 20,
+                    )
+                  : CircleAvatar(
+                      backgroundImage: AssetImage('assets/profile_1.jpg'),
+                      radius: 20,
+                    ),
             ],
           ),
           SizedBox(
@@ -91,6 +115,10 @@ class _HomePageState extends State<HomePage> {
                   width: 300,
                   height: 50,
                   child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      filterBooks(value);
+                    },
                     autocorrect: false,
                     textInputAction: TextInputAction.search,
                     decoration: InputDecoration(
@@ -120,36 +148,43 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SizedBox(height: 10),
-          Container(
-            width: 400,
-            height: 100,
-            child: Image.asset(
-              'assets/homepage.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.only(right: 150),
-            child: Text(
-              'Rekomendasi untuk kamu',
-              style: TextStyle(
-                color: Color.fromARGB(255, 0, 0, 0),
-                fontSize: 15,
-              ),
-            ),
-          ),
-          // Tambahkan Card dan GridView di sini
+          _searchController.text.isEmpty
+              ? Container(
+                  width: 400,
+                  height: 100,
+                  child: Image.asset(
+                    'assets/homepage.png',
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : Container(),
+          _searchController.text.isEmpty ? SizedBox(height: 20) : Container(),
+          _searchController.text.isEmpty
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 150),
+                  child: Text(
+                    'Rekomendasi untuk kamu',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      fontSize: 15,
+                    ),
+                  ),
+                )
+              : Container(),
           Expanded(
             child: GridView.builder(
               shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              itemCount: 6,
+              itemCount: filteredBookTitles.length,
               itemBuilder: (ctx, i) {
                 int rating = bookRatings[i % bookRatings.length];
+                String bookTitle =
+                    filteredBookTitles[i % filteredBookTitles.length];
+                String bookImage =
+                    bookImagesMap[bookTitle] ?? 'assets/default_image.png';
+
                 return InkWell(
                   onTap: () {
-                    // Navigasi ke halaman detail buku
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => DetailPage()),
@@ -170,13 +205,13 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Expanded(
                                 child: Image.asset(
-                                  bookImages[i % bookImages.length],
+                                  bookImage,
                                   fit: BoxFit.fill,
                                   height: 200,
                                 ),
                               ),
                               Text(
-                                bookTitles[i % bookTitles.length],
+                                bookTitle,
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -217,7 +252,7 @@ class _HomePageState extends State<HomePage> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 1.0,
-                crossAxisSpacing: 0.0,
+                crossAxisSpacing: 10.0,
                 mainAxisSpacing: 5,
                 mainAxisExtent: 264,
               ),
@@ -244,7 +279,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book_outlined),
-            label: 'Pinjam',
+            label: 'Rak Pinjam',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -284,5 +319,13 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+
+  void filterBooks(String query) {
+    setState(() {
+      filteredBookTitles = bookTitles
+          .where((title) => title.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
   }
 }

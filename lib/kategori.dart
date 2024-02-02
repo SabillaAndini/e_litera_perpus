@@ -92,7 +92,7 @@ class _KategoriPageState extends State<KategoriPage> {
     return Scaffold(
       appBar: AppBar(
         title: Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 8),
           child: Row(
             children: [
               Image.asset(
