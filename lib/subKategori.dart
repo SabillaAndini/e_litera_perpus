@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 
-class SubKtegoriPage extends StatefulWidget {
-  const SubKtegoriPage({Key? key}) : super(key: key);
+class SubKategoriPage extends StatefulWidget {
+  const SubKategoriPage({Key? key}) : super(key: key);
 
   @override
-  State<SubKtegoriPage> createState() => _SubKtegoriPageState();
+  State<SubKategoriPage> createState() => _SubKategoriPageState();
 }
 
-class _SubKtegoriPageState extends State<SubKtegoriPage> {
+class _SubKategoriPageState extends State<SubKategoriPage> {
+  // Contoh daftar subkategori
+  final List<String> subcategories = [
+    'Subkategori 1',
+    'Subkategori 2',
+    'Subkategori 3',
+    'Subkategori 4',
+    // Tambahkan subkategori lainnya sesuai kebutuhan
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,86 +24,44 @@ class _SubKtegoriPageState extends State<SubKtegoriPage> {
         title: const Text('Subkategori'),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
-        itemCount: 5,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (_, item) {
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 16, left: 16, right: 16, bottom: 16),
-              child: Container(
-                height: 130,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Remembers what user said earlier in the conversation',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            'Hello everyone, back again at sahretech. On this occasion, we will learn',
-                            style: TextStyle(fontSize: 12),
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.bookmark_outline,
-                                size: 23,
-                              ),
-                              const SizedBox(width: 8),
-                              const Icon(
-                                Icons.share_outlined,
-                                size: 23,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(10),
-                        image: const DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                              'https://cdn.pixabay.com/photo/2023/04/02/23/08/ai-generated-7895586_1280.jpg'),
-                        ),
-                      ),
-                    ),
-                  ],
+        itemCount: subcategories.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(subcategories[index]),
+            // Tambahkan logika untuk menavigasi ke halaman detail subkategori
+            onTap: () {
+              // Contoh: Navigasi ke halaman detail subkategori dengan parameter subkategori
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailSubkategoriPage(
+                    subkategori: subcategories[index],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           );
         },
+      ),
+    );
+  }
+}
+
+// Contoh halaman detail subkategori
+class DetailSubkategoriPage extends StatelessWidget {
+  final String subkategori;
+
+  const DetailSubkategoriPage({Key? key, required this.subkategori})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(subkategori),
+      ),
+      body: Center(
+        child: Text('Ini adalah halaman detail untuk $subkategori'),
       ),
     );
   }

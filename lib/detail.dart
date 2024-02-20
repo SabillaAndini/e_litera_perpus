@@ -1,8 +1,42 @@
-import 'package:e_litera_perpus/formPinjam.dart';
 import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
 
-class DetailPage extends StatelessWidget {
-  const DetailPage({Key? key});
+import 'formPinjam.dart';
+
+class DetailPage extends StatefulWidget {
+  const DetailPage({Key? key}) : super(key: key);
+
+  @override
+  _DetailPageState createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  bool readMore = false;
+  String text =
+      'Help Me Find My Stomach adalah sebuah buku yang bercerita tentang petualangan sekelompok murid pada umumnya. Kami sedang berada di masa di mana kami sedang mengerjakan sebuah projek untuk tugas akhir. Ini adalah kisah kami dengan lika-liku dan drama dalam mengerjakan tugas akhir yang merepotkan ini.';
+
+  TextEditingController commentController = TextEditingController();
+
+  List<Widget> commentCards = List.generate(
+    5,
+    (index) => Card(
+      elevation: 5,
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundImage: AssetImage('assets/avatarprofile.png'),
+          radius: 20,
+        ),
+        title: Text(
+          'Username $index',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          'Bukunya menarik dan cukup memotivasi, saya juga belajar cukup banyak hal-hal baru.',
+        ),
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +69,7 @@ class DetailPage extends StatelessWidget {
                         ),
                       ],
                       image: DecorationImage(
-                        image: AssetImage(
-                            'assets/buku_1.png'), // Ganti dengan path gambar sesuai buku
+                        image: AssetImage('assets/buku_1.png'),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -50,19 +83,19 @@ class DetailPage extends StatelessWidget {
                         Text(
                           'Help Me Find My Stomach',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(height: 8),
                         Text(
                           'By: Angela Gunning',
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                          style: TextStyle(fontSize: 10, color: Colors.grey),
                         ),
                         SizedBox(height: 8),
                         Text(
                           'Stok: 5 Buku',
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                          style: TextStyle(fontSize: 10, color: Colors.grey),
                         ),
                         SizedBox(height: 8),
                         SizedBox(height: 8),
@@ -85,6 +118,10 @@ class DetailPage extends StatelessWidget {
                         // Tambahan: Tombol Pinjam
                         ElevatedButton(
                           onPressed: () {
+                            // Logika peminjaman buku
+                            setState(() {
+                              readMore = !readMore;
+                            });
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -94,14 +131,18 @@ class DetailPage extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 8),
-                            backgroundColor: Color(0xffC25B4A),
+                                horizontal: 40, vertical: 10),
+                            backgroundColor:
+                                readMore ? Colors.grey : Color(0xffC25B4A),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                           child: Text(
-                            'Pinjam',
+                            readMore ? 'Dipinjam' : 'Pinjam Buku',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -113,53 +154,78 @@ class DetailPage extends StatelessWidget {
               ),
               SizedBox(height: 16),
               // Deskripsi buku
-              Text(
-                'Deskripsi Buku',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              Text(
-                'murid pada umumnya. Kami sedang berada di masa di mana kami sedang mengerjakan sebuah projek untuk tugas akhir. Ini adalah kisah kami dengan lika-liku dan drama dalam mengerjakan tugas akhir yang merepotkan ini.',
-                style: TextStyle(
+              ReadMoreText(
+                text,
+                trimLines: 2,
+                colorClickableText: Colors.blue,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: 'Selengkapnya',
+                trimExpandedText: 'Sembunyikan',
+                moreStyle: const TextStyle(
                   fontSize: 14,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+
               SizedBox(height: 16),
               // Kolom komentar
               Text(
                 'Komentar',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              // List of comments (using ListView.builder)
               Container(
                 height: 200,
-                child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      elevation: 5,
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: ListTile(
-                        title: Text('Username $index'),
-                        subtitle: Text(
-                          'Bukunya menarik dan cukup memotivasi, saya juga belajar cukup banyak hal-hal baru.',
-                        ),
-                      ),
-                    );
-                  },
+                child: ListView(
+                  children: commentCards,
                 ),
               ),
               SizedBox(height: 10),
               // Form komentar
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Tambahkan komentar...',
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.send),
-                ),
-                maxLines: 1,
-                style: TextStyle(fontSize: 14), // Menambahkan style font size
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: commentController,
+                      decoration: InputDecoration(
+                        labelText: 'Tambahkan komentar...',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () {
+                      //Logika untuk mengatasi saat mengirim komentar
+                      String newComment = commentController.text;
+                      // Hapus
+                      commentController.clear();
+                      // menambahkan komenter baru
+                      setState(() {
+                        commentCards.add(
+                          Card(
+                            elevation: 5,
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/avatarprofile.png'),
+                                radius: 20,
+                              ),
+                              title: Text(
+                                'New User',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(newComment),
+                            ),
+                          ),
+                        );
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           ),

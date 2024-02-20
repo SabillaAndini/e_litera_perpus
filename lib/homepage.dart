@@ -1,7 +1,8 @@
 import 'dart:io';
+import 'package:e_litera_perpus/denda.dart';
+// import 'package:e_litera_perpus/pembayaran.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'detail.dart';
 import 'favorit.dart';
 import 'kategori.dart';
@@ -87,15 +88,20 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               SizedBox(width: 5),
-              _isImageSelected
-                  ? CircleAvatar(
-                      backgroundImage: FileImage(_selectedImage!),
-                      radius: 20,
-                    )
-                  : CircleAvatar(
-                      backgroundImage: AssetImage('assets/profile_1.jpg'),
-                      radius: 20,
-                    ),
+              InkWell(
+                onTap: () {
+                  _showAvatarDialog();
+                },
+                child: _isImageSelected
+                    ? CircleAvatar(
+                        backgroundImage: FileImage(_selectedImage!),
+                        radius: 20,
+                      )
+                    : CircleAvatar(
+                        backgroundImage: AssetImage('assets/profile_1.jpg'),
+                        radius: 20,
+                      ),
+              ),
             ],
           ),
           SizedBox(
@@ -327,5 +333,127 @@ class _HomePageState extends State<HomePage> {
           .where((title) => title.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
+  }
+
+  void _showAvatarDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            width: 300.0,
+            height: 300.0,
+            child: Column(
+              children: [
+                Card(
+                  color: Color(0xffC25B4A),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _isImageSelected
+                            ? CircleAvatar(
+                                backgroundImage: FileImage(_selectedImage!),
+                                radius: 30,
+                              )
+                            : CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/profile_1.jpg'),
+                                radius: 30,
+                              ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Natalia Dita',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfilePage(),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  side: BorderSide.none,
+                                  shape: const StadiumBorder(),
+                                ),
+                                child: const Text(
+                                  'Lihat Profil',
+                                  style: TextStyle(
+                                    color: Color(0xffC25B4A),
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.payment,
+                        color: Color(0xffC25B4A),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DendaPage()),
+                        );
+                      },
+                    ),
+                    Text(
+                      'Denda',
+                      style: TextStyle(
+                        color: Color(0xffC25B4A),
+                        fontSize: 10,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    IconButton(
+                      icon: Icon(Icons.logout, color: Color(0xffC25B4A)),
+                      onPressed: () {},
+                    ),
+                    Text(
+                      'Keluar Dari Aplikasi',
+                      style: TextStyle(
+                        color: Color(0xffC25B4A),
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

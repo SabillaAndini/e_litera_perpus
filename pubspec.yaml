@@ -36,6 +36,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   image_picker: ^1.0.7
+  http: ^1.2.0
+  readmore: ^2.2.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/bukulogo.png"
 
 
 dev_dependencies:
@@ -66,6 +74,9 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/elitera.png
+    - assets/barcode.png
+    - assets/logobuku.png
+    - assets/bukulogo.png
     - assets/buku_1.png
     - assets/buku_2.png
     - assets/buku_3.png
@@ -83,6 +94,31 @@ flutter:
     - assets/google-logo.png
     - assets/no_profile.png
     - assets/profile_1.jpg
+    - assets/pembayaran/alfa.png
+    - assets/pembayaran/Alfamidi.png
+    - assets/pembayaran/American.png
+    - assets/pembayaran/bank.png
+    - assets/pembayaran/BCA.png
+    - assets/pembayaran/BNI.png
+    - assets/pembayaran/BRI.png
+    - assets/pembayaran/PermataBank.png
+    - assets/pembayaran/Mandiri.png
+    - assets/pembayaran/Akulaku.png
+    - assets/pembayaran/Dana.png
+    - assets/pembayaran/DanDan.png
+    - assets/pembayaran/Gopay.png
+    - assets/pembayaran/GPay.png
+    - assets/pembayaran/Indomaret.png
+    - assets/pembayaran/Isaku.png
+    - assets/pembayaran/jcb.png
+    - assets/pembayaran/Kredivo.png
+    - assets/pembayaran/Ovo.png
+    - assets/pembayaran/QRIS.png
+    - assets/pembayaran/ShopeePay.png
+    - assets/pembayaran/SPayLater.png
+    - assets/pembayaran/visa.png
+    - assets/pembayaran/LinkAja.png
+    
     
     
 

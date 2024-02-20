@@ -1,6 +1,7 @@
 import 'package:e_litera_perpus/homepage.dart';
 import 'package:e_litera_perpus/register.dart';
 import 'package:flutter/material.dart';
+// import 'package:http/http.dart' as http;
 
 class BottomNavigationBarExample extends StatefulWidget {
   @override
@@ -49,6 +50,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -59,87 +65,104 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 40),
             height: MediaQuery.of(context).size.height - 50,
             width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    const SizedBox(height: 60.0),
-                    const Text(
-                      "Selamat Datang",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+            child: Form(
+              // Wrap with Form widget
+              key: _formKey, // Assign form key
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      const SizedBox(height: 60.0),
+                      const Text(
+                        "Selamat Datang",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Image.asset(
-                      'assets/gambar_1.png',
-                      height: 130,
-                    )
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    TextField(
-                      decoration: InputDecoration(
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Image.asset(
+                        'assets/gambar_1.png',
+                        height: 130,
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      TextFormField(
+                        // Use TextFormField for validation
+                        controller: _usernameController,
+                        decoration: InputDecoration(
                           hintText: "Nama Pengguna",
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18),
-                              borderSide: BorderSide.none),
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: BorderSide.none,
+                          ),
                           fillColor: Color(0xffC25B4A).withOpacity(0.1),
                           filled: true,
-                          prefixIcon: const Icon(Icons.person)),
-                    ),
-                    const SizedBox(height: 20),
-                    PasswordTextField(),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-                Container(
-                    height: 50,
-                    padding: const EdgeInsets.only(top: 3, left: 3),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                        );
-                      },
-                      child: const Text(
-                        "Masuk",
-                        style: TextStyle(fontSize: 10, color: Colors.white),
+                          prefixIcon: const Icon(Icons.person),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nama Pengguna harus diisi';
+                          }
+                          return null;
+                        },
                       ),
-                      style: ElevatedButton.styleFrom(
-                        shape: const StadiumBorder(),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: Color(0xffC25B4A),
-                      ),
-                    )),
-                const Center(child: Text("Or")),
-                GoogleSignInButton(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text("Belum Punya Akun?"),
-                    TextButton(
+                      const SizedBox(height: 20),
+                      PasswordTextField(controller: _passwordController),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                  Container(
+                      height: 50,
+                      padding: const EdgeInsets.only(top: 3, left: 3),
+                      child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RegisterPage()),
-                          );
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()),
+                            );
+                          }
                         },
                         child: const Text(
-                          "Daftar",
-                          style: TextStyle(color: Color(0xffC25B4A)),
-                        ))
-                  ],
-                )
-              ],
+                          "Masuk",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          backgroundColor: Color(0xffC25B4A),
+                        ),
+                      )),
+                  const Center(child: Text("Or")),
+                  GoogleSignInButton(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text("Belum Punya Akun?"),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterPage()),
+                            );
+                          },
+                          child: const Text(
+                            "Daftar",
+                            style: TextStyle(color: Color(0xffC25B4A)),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -149,6 +172,10 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 class PasswordTextField extends StatefulWidget {
+  final TextEditingController controller;
+
+  const PasswordTextField({required this.controller});
+
   @override
   _PasswordTextFieldState createState() => _PasswordTextFieldState();
 }
@@ -158,7 +185,9 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      // Change TextField to TextFormField
+      controller: widget.controller,
       decoration: InputDecoration(
         hintText: "Kata Sandi",
         border: OutlineInputBorder(
@@ -180,6 +209,12 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         ),
       ),
       obscureText: _isObscure,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Kata Sandi harus diisi';
+        }
+        return null;
+      },
     );
   }
 }

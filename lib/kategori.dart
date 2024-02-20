@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'detail.dart';
 import 'favorit.dart';
 import 'homepage.dart';
 import 'notifikasi.dart';
@@ -42,49 +43,7 @@ class _KategoriPageState extends State<KategoriPage> {
         {'title': 'Filsafat Aksiologi'},
       ],
     },
-    {
-      'title': 'Sosial',
-      'imageUrl': 'assets/kategori1.jpeg',
-      'subkategori': [
-        {'title': 'Sosiologi'},
-        {'title': 'Kesejahteraan Masyarakat'},
-        {'title': 'Politik dan Ekonomi'},
-        {'title': 'Budaya dan Identitas'},
-        {'title': 'Isu Kontemporer'},
-      ],
-    },
-    {
-      'title': 'Agama',
-      'imageUrl': 'assets/bgbuku.jpg',
-      'subkategori': [
-        {'title': 'Islam'},
-        {'title': 'Protestan dan Katolik'},
-        {'title': 'Hindu'},
-        {'title': 'Buddha'},
-        {'title': 'Konghucu'},
-      ],
-    },
-    {
-      'title': 'Bahasa',
-      'imageUrl': 'assets/bgbuku.jpg',
-      'subkategori': [
-        {'title': 'Tata Bahasa'},
-        {'title': 'Cerpen Indonesia'},
-        {'title': 'Bahasa Indonesia'},
-        {'title': 'Bahasa Asing'},
-      ],
-    },
-    {
-      'title': 'Sains dan Matematika',
-      'imageUrl': 'assets/kategori3.jpeg',
-      'subkategori': [
-        {'title': 'Sains'},
-        {'title': 'Matematika Dasar'},
-        {'title': 'Kimia'},
-        {'title': 'Kalkulus'},
-        {'title': 'Fisika'},
-      ],
-    },
+    // Tambahkan data kategori lainnya sesuai kebutuhan
   ];
 
   @override
@@ -161,6 +120,19 @@ class _KategoriPageState extends State<KategoriPage> {
                             onSelected: (String result) {
                               // Tambahkan logika untuk menangani item yang dipilih
                               print(result);
+                              // Cari kategori yang sesuai dengan subkategori yang dipilih
+                              var selectedSubkategori = data['subkategori']
+                                  .firstWhere(
+                                      (element) => element['title'] == result);
+                              // Navigasi ke halaman subkategori
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SubKategoriPage(
+                                    subkategori: selectedSubkategori['title'],
+                                  ),
+                                ),
+                              );
                             },
                             itemBuilder: (BuildContext context) =>
                                 (data['subkategori']
@@ -243,6 +215,124 @@ class _KategoriPageState extends State<KategoriPage> {
             );
           }
         },
+      ),
+    );
+  }
+}
+
+class SubKategoriPage extends StatelessWidget {
+  final String subkategori;
+
+  const SubKategoriPage({Key? key, required this.subkategori})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Contoh data untuk subkategori
+    Map<String, String> bookImagesMap = {
+      'Help Me Find My Stomach': 'assets/buku_1.png',
+      'The Adventure Begins': 'assets/buku_2.png',
+      'Mystery of the Moon': 'assets/buku_3.png',
+      'Magic of the Amazing Forest': 'assets/buku_4.png',
+      'Put The Petal To The Metal': 'assets/buku_5.png',
+      'In the Shadows Monster': 'assets/buku_6.png',
+    };
+
+    List<int> bookRatings = [4, 3, 4, 4, 4, 4];
+
+    List<String> bookTitles = [
+      'Help Me Find My Stomach',
+      'The Adventure Begins',
+      'Mystery of the Moon',
+      'Magic of the Amazing Forest',
+      'Put The Petal To The Metal',
+      'In the Shadows Monster'
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(subkategori),
+      ),
+      body: GridView.builder(
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        itemCount: bookTitles.length,
+        itemBuilder: (ctx, i) {
+          int rating = bookRatings[i % bookRatings.length];
+          String bookTitle = bookTitles[i % bookTitles.length];
+          String bookImage =
+              bookImagesMap[bookTitle] ?? 'assets/default_image.png';
+
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DetailPage()),
+              );
+            },
+            child: Card(
+              child: Container(
+                height: 300,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(5),
+                child: Stack(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: Image.asset(
+                            bookImage,
+                            fit: BoxFit.fill,
+                            height: 200,
+                          ),
+                        ),
+                        Text(
+                          bookTitle,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Text(
+                              'By: Angela Gunning',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5),
+                        Row(
+                          children: List.generate(
+                            5,
+                            (index) => Icon(
+                              index < rating ? Icons.star : Icons.star_border,
+                              color:
+                                  index < rating ? Colors.yellow : Colors.grey,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1.0,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 5,
+          mainAxisExtent: 264,
+        ),
       ),
     );
   }

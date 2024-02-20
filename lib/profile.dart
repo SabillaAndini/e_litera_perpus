@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:e_litera_perpus/denda.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'kategori.dart';
@@ -19,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndex = 4;
   File? _selectedImage;
   bool _isImageSelected = false;
+  bool _isEditing = false;
 
   Future<void> _pickImage() async {
     final imagePicker = ImagePicker();
@@ -132,22 +132,90 @@ class _ProfilePageState extends State<ProfilePage> {
                   Text('0812345678'),
                   Text('Jl. Bunga Tulip no 5'),
                   SizedBox(height: 20),
-                  SizedBox(
-                    width: 200,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => DendaPage()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xffC25B4A),
-                        side: BorderSide.none,
-                        shape: const StadiumBorder(),
+                  Visibility(
+                    visible: !_isEditing,
+                    child: SizedBox(
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _isEditing = true;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xffC25B4A),
+                          side: BorderSide.none,
+                          shape: const StadiumBorder(),
+                        ),
+                        child: const Text('Edit Profile',
+                            style: TextStyle(color: Colors.white)),
                       ),
-                      child: const Text('Edit Profile',
-                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  Visibility(
+                    visible: _isEditing,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20),
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Name',
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Phone',
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Address',
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isEditing = false;
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey,
+                                side: BorderSide.none,
+                                shape: const StadiumBorder(),
+                              ),
+                              child: const Text('Cancel',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Simpan perubahan profil
+                                setState(() {
+                                  _isEditing = false;
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xffC25B4A),
+                                side: BorderSide.none,
+                                shape: const StadiumBorder(),
+                              ),
+                              child: const Text('Save Changes',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 30),

@@ -10,7 +10,22 @@ class FormPinjamPage extends StatefulWidget {
 class _FormPinjamPageState extends State<FormPinjamPage> {
   final TextEditingController _bookTitleController = TextEditingController();
   final TextEditingController _borrowerNameController = TextEditingController();
-  final TextEditingController _returnDateController = TextEditingController();
+  final TextEditingController _peminjamanController = TextEditingController();
+  final TextEditingController _pengembalianController = TextEditingController();
+
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        controller.text = picked.toString();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +71,18 @@ class _FormPinjamPageState extends State<FormPinjamPage> {
               'Tanggal Peminjaman:',
               style: TextStyle(fontSize: 18),
             ),
-            TextField(
-              controller: _returnDateController,
+            TextFormField(
+              controller: _peminjamanController,
+              readOnly: true,
+              onTap: () => _selectDate(context, _peminjamanController),
               decoration: InputDecoration(
                 hintText: 'Tanggal peminjaman',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
+                ),
+                suffixIcon: GestureDetector(
+                  onTap: () => _selectDate(context, _peminjamanController),
+                  child: Icon(Icons.date_range),
                 ),
               ),
             ),
@@ -70,12 +91,18 @@ class _FormPinjamPageState extends State<FormPinjamPage> {
               'Tanggal Kembali:',
               style: TextStyle(fontSize: 18),
             ),
-            TextField(
-              controller: _returnDateController,
+            TextFormField(
+              controller: _pengembalianController,
+              readOnly: true,
+              onTap: () => _selectDate(context, _pengembalianController),
               decoration: InputDecoration(
                 hintText: 'Tanggal Pengembalian',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
+                ),
+                suffixIcon: GestureDetector(
+                  onTap: () => _selectDate(context, _pengembalianController),
+                  child: Icon(Icons.date_range),
                 ),
               ),
             ),
@@ -83,15 +110,29 @@ class _FormPinjamPageState extends State<FormPinjamPage> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Add logic to handle the form submission
+                  // logika
                   String bookTitle = _bookTitleController.text;
                   String borrowerName = _borrowerNameController.text;
-                  String returnDate = _returnDateController.text;
+                  String peminjaman = _peminjamanController.text;
+                  String pengembalian = _pengembalianController.text;
 
-                  // Add your logic to handle the form data
+                  // tambahkan logika form data
                   print('Judul Buku: $bookTitle');
                   print('Nama Peminjam: $borrowerName');
-                  print('Tanggal Peminjaman: $returnDate');
+                  print('Tanggal Peminjaman: $peminjaman');
+                  print('Tanggal Pengembalian: $pengembalian');
+
+                  // Kembali ke halaman Detail Buku
+                  Navigator.pop(context);
+
+                  // Tampilkan notifikasi
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content:
+                          Text('Permintaan peminjaman buku sedang diproses'),
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xffC25B4A),
