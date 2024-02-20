@@ -1,7 +1,7 @@
 import 'package:e_litera_perpus/homepage.dart';
 import 'package:e_litera_perpus/register.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 
 class BottomNavigationBarExample extends StatefulWidget {
   @override
@@ -52,8 +52,33 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  // fungsi untuk menyambungkan API
+  Future<void> login() async {
+    Uri url = Uri.parse('http://127.0.0.1:8000/api/auth/login-mobile');
+    try {
+      final response = await http.post(
+        url,
+        body: {
+          'email': _usernameController.text,
+          'password': _passwordController.text,
+        },
+      );
+      if (response.statusCode == 200) {
+        // respon jika login berhasil
+        final data = response.body;
+        // Lakukan sesuatu dengan data
+        print(data);
+      } else {
+        // jika gagal melakukan login
+        throw Exception('Failed to login');
+      }
+    } catch (e) {
+      // Handle error/permasalahan yang terjadi
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +91,7 @@ class _LoginPageState extends State<LoginPage> {
             height: MediaQuery.of(context).size.height - 50,
             width: double.infinity,
             child: Form(
-              // Wrap with Form widget
-              key: _formKey, // Assign form key
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,7 +118,6 @@ class _LoginPageState extends State<LoginPage> {
                   Column(
                     children: <Widget>[
                       TextFormField(
-                        // Use TextFormField for validation
                         controller: _usernameController,
                         decoration: InputDecoration(
                           hintText: "Nama Pengguna",
@@ -124,6 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
+                            login(); // Panggil method login() di sini
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -186,7 +210,6 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      // Change TextField to TextFormField
       controller: widget.controller,
       decoration: InputDecoration(
         hintText: "Kata Sandi",
@@ -245,7 +268,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
       ),
       child: TextButton(
         onPressed: () {
-          // Tambahkan logika tindakan ketika tombol ditekan di sini
+          // Tambahkan logika tindakan ketika tombol ditekan
           print("Google Sign In button pressed");
         },
         child: Row(

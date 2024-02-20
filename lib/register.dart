@@ -1,6 +1,6 @@
 import 'package:e_litera_perpus/login.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 
 // import 'homepage.dart';
 
@@ -18,8 +18,36 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  // Menyambungkan API register/daftar
+  Future<void> register() async {
+    Uri url = Uri.parse('http://127.0.0.1:8000/api/auth/register');
+    try {
+      final response = await http.post(
+        url,
+        body: {
+          'name': _usernameController.text,
+          'email': _emailController.text,
+          'phone': _phoneController.text,
+          'password': _passwordController.text,
+          'password_confirmation': _confirmPasswordController.text,
+        },
+      );
+      if (response.statusCode == 200) {
+        // Registrasi berhasil
+        final data = response.body;
+        // Lakukan sesuatu dengan data
+        print(data);
+      } else {
+        // jika gagal melakukan registrasi
+        throw Exception('Failed to register');
+      }
+    } catch (e) {
+      // menangani error yang terjadi
+      print(e);
+    }
+  }
 
   bool _isObscurePassword = true;
   bool _isObscureConfirmPassword = true;
@@ -27,11 +55,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-        backgroundColor: Colors.transparent, // Remove app bar background color
-        elevation: 0, // Remove app bar shadow
-      ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -70,6 +93,25 @@ class _RegisterPageState extends State<RegisterPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Nama Pengguna harus diisi';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    hintText: "Nama Lengkap",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide.none),
+                    fillColor: Color(0xffC25B4A).withOpacity(0.1),
+                    filled: true,
+                    prefixIcon: const Icon(Icons.person),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Nama Lengkap harus diisi';
                     }
                     return null;
                   },
@@ -179,6 +221,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      register(); // Panggil method register() di sini
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),

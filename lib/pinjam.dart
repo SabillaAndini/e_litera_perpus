@@ -239,19 +239,20 @@ class _PinjamPageState extends State<PinjamPage> {
             ListView.builder(
               itemCount: 5,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                   child: Card(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Image.asset(
+                          bookImages[index],
+                          width: double.infinity,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
                         ListTile(
-                          leading: Image.asset(
-                            bookImages[index],
-                            width: 300,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
                           title: Text(bookTitles[index]),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,36 +262,32 @@ class _PinjamPageState extends State<PinjamPage> {
                             ],
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => FormPinjamPage()),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xffC25B4A),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0, vertical: 5.0),
-                                child: Text(
-                                  'Pinjam',
-                                  style: TextStyle(color: Colors.white),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FormPinjamPage(),
                                 ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Color(0xffC25B4A),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0,
+                                vertical: 5.0,
+                              ),
+                              child: Text(
+                                'Pinjam',
+                                style: TextStyle(color: Colors.white),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 5,
-                          width: 15,
-                        )
                       ],
                     ),
                   ),
