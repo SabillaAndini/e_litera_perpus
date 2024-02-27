@@ -16,6 +16,9 @@ class PinjamPage extends StatefulWidget {
 
 class _PinjamPageState extends State<PinjamPage> {
   int _selectedIndex = 3;
+  bool isReturning = false;
+
+  List<bool> bookReturningStatus = List.generate(5, (index) => false);
 
   List<String> bookImages = [
     'assets/buku_1.png',
@@ -43,7 +46,7 @@ class _PinjamPageState extends State<PinjamPage> {
     'David Brown'
   ];
 
-  List<double> bookRatings = [4.5, 3.8, 4.2, 4.6, 4.7, 4.3];
+  List<int> bookRatings = [4, 3, 4, 4, 4, 4];
 
   @override
   Widget build(BuildContext context) {
@@ -91,19 +94,24 @@ class _PinjamPageState extends State<PinjamPage> {
             ),
           ],
           bottom: TabBar(
+            labelColor: Color(0xffC25B4A), // Warna teks yang dipilih
             tabs: [
-              Tab(text: 'Pinjam'),
+              Tab(
+                text: 'Pinjam',
+              ),
               Tab(text: 'Terlambat'),
               Tab(text: 'Selesai'),
             ],
+            indicatorColor: Color(0xffC25B4A), // Warna indikator
           ),
           automaticallyImplyLeading: false,
         ),
         body: TabBarView(
           children: [
             // Tab View Buku Dipinjam
-            ListView.builder(
+            ListView.separated(
               itemCount: 5,
+              separatorBuilder: (BuildContext context, int index) => Divider(),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   padding:
@@ -136,16 +144,50 @@ class _PinjamPageState extends State<PinjamPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: ElevatedButton(
                               onPressed: () {
-                                // Logika untuk pengembalian buku
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Konfirmasi Pengembalian"),
+                                      content: Text(
+                                          "Apakah Anda yakin ingin mengembalikan buku ini?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Tutup dialog
+                                          },
+                                          child: Text("Tidak"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            // Logika untuk pengembalian buku
+                                            setState(() {
+                                              // Mengubah status pengembalian buku
+                                              bookReturningStatus[index] = true;
+                                            });
+                                            Navigator.of(context)
+                                                .pop(); // Tutup dialog
+                                          },
+                                          child: Text("Ya"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xffC25B4A),
+                                backgroundColor: bookReturningStatus[index]
+                                    ? Colors.grey
+                                    : Color(0xffC25B4A),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 5.0, vertical: 5.0),
                                 child: Text(
-                                  'Pengembalian',
+                                  bookReturningStatus[index]
+                                      ? 'Dalam Proses'
+                                      : 'Kembalikan',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -158,6 +200,7 @@ class _PinjamPageState extends State<PinjamPage> {
                 );
               },
             ),
+
             // Tab View Buku Terlambat
             ListView.builder(
               itemCount: 5,
@@ -239,51 +282,53 @@ class _PinjamPageState extends State<PinjamPage> {
             ListView.builder(
               itemCount: 5,
               itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 16.0),
+                return Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   child: Card(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Image.asset(
-                          bookImages[index],
-                          width: double.infinity,
-                          height: 200,
-                          fit: BoxFit.cover,
-                        ),
                         ListTile(
+                          leading: Image.asset(
+                            bookImages[index],
+                            width: 50,
+                            height: 100,
+                            fit: BoxFit.fill,
+                          ),
                           title: Text(bookTitles[index]),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Pengarang: ${bookAuthors[index]}'),
-                              Text('Rating: ${bookRatings[index]}'),
-                            ],
+                          subtitle: Row(
+                            children: List.generate(5, (i) {
+                              if (i < bookRatings[index]) {
+                                return Icon(Icons.star, color: Colors.orange);
+                              } else {
+                                return Icon(Icons.star_border,
+                                    color: Colors.orange);
+                              }
+                            }),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => FormPinjamPage(),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Color(0xffC25B4A),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0,
-                                vertical: 5.0,
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FormPinjamPage()),
+                                ); // Logika untuk pengembalian buku
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xffC25B4A),
                               ),
-                              child: Text(
-                                'Pinjam',
-                                style: TextStyle(color: Colors.white),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5.0, vertical: 5.0),
+                                child: Text(
+                                  'Pinjam',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                           ),

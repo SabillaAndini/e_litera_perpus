@@ -1,22 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
-
 import 'formPinjam.dart';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({Key? key}) : super(key: key);
+  final String bookImage;
+  final String bookTitle;
+
+  const DetailPage({Key? key, required this.bookImage, required this.bookTitle})
+      : super(key: key);
 
   @override
   _DetailPageState createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
+  Map<String, String> bookDescriptions = {
+    'Help Me Find My Stomach':
+        'Buku ini mengisahkan tentang petualangan sekelompok murid dalam mengerjakan sebuah proyek tugas akhir. Ikuti lika-liku dan drama yang mereka alami dalam perjalanan mereka.',
+    'Mystery of the Moon':
+        'Buku ini mengisahkan tentang misteri yang terjadi di bulan. Sebuah cerita yang penuh dengan petualangan dan teka-teki yang harus dipecahkan.',
+    'Magic of the Amazing Forest':
+        'Buku ini membawa pembaca ke dalam hutan ajaib yang penuh dengan keajaiban dan keindahan alam. Ikuti petualangan yang menakjubkan di dalamnya.',
+    'The Adventure Begins':
+        'Buku ini mengisahkan tentang awal petualangan yang menegangkan dan penuh dengan tantangan. Siapkan diri Anda untuk terbang bersama dalam cerita yang luar biasa.',
+    'Put The Petal To The Metal':
+        'Buku ini memperkenalkan pembaca pada dunia balap mobil yang seru. Nikmati kecepatan dan adrenalin dalam setiap halaman cerita yang menarik.',
+    'In the Shadows Monster':
+        'Buku ini mengungkap misteri tentang monster yang ada di balik bayang-bayang. Ikuti jejak para tokoh utama dalam mengungkap kebenaran yang tersembunyi.'
+  };
+
+  Map<String, String> bookCategories = {
+    'Help Me Find My Stomach': 'Petualangan',
+    'Mystery of the Moon': 'Misteri',
+    'Magic of the Amazing Forest': 'Fantasi',
+    'The Adventure begins': 'Petualangan',
+    'Put The Petal To The Metal': 'Fiksi',
+    'In The Shadows Monster': 'Horor',
+  };
+
   bool readMore = false;
-  String text =
-      'Help Me Find My Stomach adalah sebuah buku yang bercerita tentang petualangan sekelompok murid pada umumnya. Kami sedang berada di masa di mana kami sedang mengerjakan sebuah projek untuk tugas akhir. Ini adalah kisah kami dengan lika-liku dan drama dalam mengerjakan tugas akhir yang merepotkan ini.';
-
   TextEditingController commentController = TextEditingController();
-
   List<Widget> commentCards = List.generate(
     5,
     (index) => Card(
@@ -40,6 +63,9 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    String text = bookDescriptions[widget.bookTitle] ?? '';
+    String category = bookCategories[widget.bookTitle] ?? '';
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Detail Buku'),
@@ -59,17 +85,17 @@ class _DetailPageState extends State<DetailPage> {
                     width: 140,
                     height: 180,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(0),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 2,
-                          blurRadius: 5,
+                          blurRadius: 2,
                           offset: Offset(0, 3),
                         ),
                       ],
                       image: DecorationImage(
-                        image: AssetImage('assets/buku_1.png'),
+                        image: AssetImage(widget.bookImage),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -81,7 +107,7 @@ class _DetailPageState extends State<DetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Help Me Find My Stomach',
+                          widget.bookTitle,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -94,7 +120,7 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Stok: 5 Buku',
+                          'Kategori: $category',
                           style: TextStyle(fontSize: 10, color: Colors.grey),
                         ),
                         SizedBox(height: 8),

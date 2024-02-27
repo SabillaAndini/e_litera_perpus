@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:e_litera_perpus/denda.dart';
-// import 'package:e_litera_perpus/pembayaran.dart';
+import 'package:e_litera_perpus/detail.dart';
+import 'package:e_litera_perpus/login.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'detail.dart';
 import 'favorit.dart';
 import 'kategori.dart';
 import 'notifikasi.dart';
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                         radius: 20,
                       )
                     : CircleAvatar(
-                        backgroundImage: AssetImage('assets/profile_1.jpg'),
+                        backgroundImage: AssetImage('assets/avatarprofile.png'),
                         radius: 20,
                       ),
               ),
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                   margin: const EdgeInsets.only(top: 20),
-                  width: 300,
+                  width: 340,
                   height: 50,
                   child: TextField(
                     controller: _searchController,
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 10),
           _searchController.text.isEmpty
               ? Container(
-                  width: 400,
+                  width: 340,
                   height: 100,
                   child: Image.asset(
                     'assets/homepage.png',
@@ -171,9 +171,9 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     'Rekomendasi untuk kamu',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 15,
-                    ),
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
                   ),
                 )
               : Container(),
@@ -193,7 +193,9 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DetailPage()),
+                      MaterialPageRoute(
+                          builder: (context) => DetailPage(
+                              bookImage: bookImage, bookTitle: bookTitle)),
                     );
                   },
                   child: Card(
@@ -258,8 +260,8 @@ class _HomePageState extends State<HomePage> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 1.0,
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 5,
+                crossAxisSpacing: 15.0,
+                mainAxisSpacing: 10,
                 mainAxisExtent: 264,
               ),
             ),
@@ -359,7 +361,7 @@ class _HomePageState extends State<HomePage> {
                               )
                             : CircleAvatar(
                                 backgroundImage:
-                                    AssetImage('assets/profile_1.jpg'),
+                                    AssetImage('assets/avatarprofile.png'),
                                 radius: 30,
                               ),
                         SizedBox(width: 16),
@@ -406,38 +408,53 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(height: 10),
-                Row(
+                Column(
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.payment,
-                        color: Color(0xffC25B4A),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => DendaPage()),
-                        );
-                      },
-                    ),
-                    Text(
-                      'Denda',
-                      style: TextStyle(
-                        color: Color(0xffC25B4A),
-                        fontSize: 10,
-                      ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.payment,
+                            color: Color(0xffC25B4A),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DendaPage()),
+                            );
+                          },
+                        ),
+                        Text(
+                          'Denda',
+                          style: TextStyle(
+                            color: Color(0xffC25B4A),
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 10),
-                    IconButton(
-                      icon: Icon(Icons.logout, color: Color(0xffC25B4A)),
-                      onPressed: () {},
-                    ),
-                    Text(
-                      'Keluar Dari Aplikasi',
-                      style: TextStyle(
-                        color: Color(0xffC25B4A),
-                        fontSize: 10,
-                      ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.logout, color: Color(0xffC25B4A)),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
+                            );
+                          },
+                        ),
+                        Text(
+                          'Keluar Dari Aplikasi',
+                          style: TextStyle(
+                            color: Color(0xffC25B4A),
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

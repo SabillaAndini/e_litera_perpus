@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                       TextFormField(
                         controller: _usernameController,
                         decoration: InputDecoration(
-                          hintText: "Nama Pengguna",
+                          hintText: "Nama Pengguna atau Email",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(18),
                             borderSide: BorderSide.none,
@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Nama Pengguna harus diisi';
+                            return 'Nama Pengguna atau  Email harus diisi';
                           }
                           return null;
                         },
@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: const Text(
                           "Masuk",
-                          style: TextStyle(fontSize: 10, color: Colors.white),
+                          style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
                           shape: const StadiumBorder(),
@@ -248,6 +248,186 @@ class GoogleSignInButton extends StatefulWidget {
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
+  Future<void> _showGoogleSignInDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: Column(
+            children: [
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/google-logo.png',
+                    height: 15,
+                    width: 15,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Sign in With Google',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(),
+              const SizedBox(height: 10),
+              const Text(
+                'Choose an account',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              const SizedBox(height: 8),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: 'to continue to ',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Company',
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Divider(),
+              SizedBox(height: 5),
+              Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage('assets/loggoogle.png'),
+                  ),
+                  SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Natalia Dita',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'nataliadita@gmail.com',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Divider(),
+              Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        // Warna border
+                        width: 2, // Lebar border
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.person_2_outlined,
+                      size: 24, // Ukuran ikon
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Use another account',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Divider(),
+              SizedBox(
+                height: 5,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'To continue, Google will share your name, ',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text: 'email address, ',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text: 'language preference, ',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text: 'and profile picture  with Company.',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text:
+                            ' Before using this app, you can review Company\'s  ',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text: 'privacy policy ',
+                        style: TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text: 'and ',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text: 'terms of service. ',
+                        style: TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Batal'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Masuk'),
+              onPressed: () {
+                // tindakan ketika tombol Masuk ditekan
+                Navigator.of(context).pop();
+                print("Google Sign In button pressed");
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -267,10 +447,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
         ],
       ),
       child: TextButton(
-        onPressed: () {
-          // Tambahkan logika tindakan ketika tombol ditekan
-          print("Google Sign In button pressed");
-        },
+        onPressed: _showGoogleSignInDialog,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -289,7 +466,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
             const Text(
               "Masuk Dengan Google",
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 15,
                 color: Color(0xffC25B4A),
               ),
             ),

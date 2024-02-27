@@ -85,7 +85,9 @@ class _FavoritPageState extends State<FavoritPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DetailPage()),
+                  MaterialPageRoute(
+                      builder: (context) => DetailPage(
+                          bookImage: bookImage, bookTitle: bookTitle)),
                 );
               },
               child: Card(

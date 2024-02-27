@@ -71,58 +71,140 @@ class _MetodePembayaranPageState extends State<MetodePembayaranPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Metode Pembayaran'),
+        title: Text(
+          'Metode Pembayaran',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xffC25B4A),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.close,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        automaticallyImplyLeading: false,
       ),
-      body: ListView.builder(
-        itemCount: metodePembayaran.length,
-        itemBuilder: (context, index) {
-          return Card(
-            color: Colors.white, // Mengatur warna card menjadi putih
-            elevation: 0.7, // Penambahan shadow
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            child: ListTile(
-              contentPadding: EdgeInsets.all(20),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    metodePembayaran[index],
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 4,
-                      mainAxisSpacing: 4,
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 8, 16, 0),
+            alignment: Alignment.topRight,
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                text: 'Choose Within ',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: '24:00:00',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.blue,
                     ),
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: metodePembayaranImages[index].length,
-                    itemBuilder: (gridContext, gridIndex) {
-                      return Image.asset(
-                        metodePembayaranImages[index][gridIndex],
-                        width: 3,
-                        height: 3,
-                      );
-                    },
                   ),
                 ],
               ),
-              trailing: Icon(Icons
-                  .keyboard_arrow_right), // Menambahkan ikon keyboard_arrow_right di sebelah kanan
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content:
-                        Text('Metode Pembayaran: ${metodePembayaran[index]}'),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Total',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                Text(
+                  'Rp. 10.000',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      'Order ID #191922521',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.copy,
+                      size: 10,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: metodePembayaran.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  color: Colors.white,
+                  elevation: 0.7,
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(20),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          metodePembayaran[index],
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 8),
+                        GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 4,
+                            mainAxisSpacing: 4,
+                          ),
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: metodePembayaranImages[index].length,
+                          itemBuilder: (gridContext, gridIndex) {
+                            return Image.asset(
+                              metodePembayaranImages[index][gridIndex],
+                              width: 3,
+                              height: 3,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    trailing: Icon(Icons
+                        .keyboard_arrow_right), // Menambahkan ikon keyboard_arrow_right di sebelah kanan
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Metode Pembayaran: ${metodePembayaran[index]}'),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: MetodePembayaranPage(),
+  ));
 }

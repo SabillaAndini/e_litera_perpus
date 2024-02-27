@@ -73,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         radius: 20,
                       )
                     : CircleAvatar(
-                        backgroundImage: AssetImage('assets/profile_1.jpg'),
+                        backgroundImage: AssetImage('assets/avatarprofile.png'),
                         radius: 20,
                       ),
               ],
@@ -101,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             )
                           : CircleAvatar(
                               backgroundImage:
-                                  AssetImage('assets/profile_1.jpg'),
+                                  AssetImage('assets/avatarprofile.png'),
                               radius: 60,
                             ),
                       Positioned(
@@ -147,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           side: BorderSide.none,
                           shape: const StadiumBorder(),
                         ),
-                        child: const Text('Edit Profile',
+                        child: const Text('Edit Profil',
                             style: TextStyle(color: Colors.white)),
                       ),
                     ),
@@ -159,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(height: 20),
                         TextField(
                           decoration: InputDecoration(
-                            labelText: 'Name',
+                            labelText: 'Nama',
                           ),
                         ),
                         SizedBox(height: 10),
@@ -171,13 +171,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(height: 10),
                         TextField(
                           decoration: InputDecoration(
-                            labelText: 'Phone',
+                            labelText: 'Nomor Telepon',
                           ),
                         ),
                         SizedBox(height: 10),
                         TextField(
                           decoration: InputDecoration(
-                            labelText: 'Address',
+                            labelText: 'Alamat',
                           ),
                         ),
                         SizedBox(height: 20),
@@ -195,7 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 side: BorderSide.none,
                                 shape: const StadiumBorder(),
                               ),
-                              child: const Text('Cancel',
+                              child: const Text('Batal',
                                   style: TextStyle(color: Colors.white)),
                             ),
                             ElevatedButton(
@@ -210,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 side: BorderSide.none,
                                 shape: const StadiumBorder(),
                               ),
-                              child: const Text('Save Changes',
+                              child: const Text('Simpan',
                                   style: TextStyle(color: Colors.white)),
                             ),
                           ],
