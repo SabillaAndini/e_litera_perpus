@@ -39,6 +39,10 @@ dependencies:
   http: ^1.2.0
   readmore: ^2.2.0
   flutter_launcher_icons: ^0.13.1
+  dio: ^5.4.1
+  rating: ^1.0.0-dev.1
+  mysql1: ^0.20.0
+  # midpay: ^1.1.7
 
 flutter_launcher_icons:
   android: "launcher_icon"

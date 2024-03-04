@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FormPinjamPage extends StatefulWidget {
-  const FormPinjamPage({Key? key}) : super(key: key);
+  final String bookImage;
+
+  const FormPinjamPage({Key? key, required this.bookImage}) : super(key: key);
 
   @override
   _FormPinjamPageState createState() => _FormPinjamPageState();
@@ -39,6 +41,28 @@ class _FormPinjamPageState extends State<FormPinjamPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 24),
+            // Container untuk menampilkan gambar
+            Container(
+              width: 140,
+              height: 180,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+                image: DecorationImage(
+                  image: AssetImage(widget.bookImage),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+            SizedBox(height: 24),
             Text(
               'Nama Peminjam:',
               style: TextStyle(fontSize: 18),

@@ -15,7 +15,7 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   Map<String, String> bookDescriptions = {
-    'Help Me Find My Stomach':
+    'Petualangan Sahabat':
         'Buku ini mengisahkan tentang petualangan sekelompok murid dalam mengerjakan sebuah proyek tugas akhir. Ikuti lika-liku dan drama yang mereka alami dalam perjalanan mereka.',
     'Mystery of the Moon':
         'Buku ini mengisahkan tentang misteri yang terjadi di bulan. Sebuah cerita yang penuh dengan petualangan dan teka-teki yang harus dipecahkan.',
@@ -29,16 +29,53 @@ class _DetailPageState extends State<DetailPage> {
         'Buku ini mengungkap misteri tentang monster yang ada di balik bayang-bayang. Ikuti jejak para tokoh utama dalam mengungkap kebenaran yang tersembunyi.'
   };
 
-  Map<String, String> bookCategories = {
-    'Help Me Find My Stomach': 'Petualangan',
-    'Mystery of the Moon': 'Misteri',
-    'Magic of the Amazing Forest': 'Fantasi',
-    'The Adventure begins': 'Petualangan',
-    'Put The Petal To The Metal': 'Fiksi',
-    'In The Shadows Monster': 'Horor',
+  Map<String, Map<String, String>> bookInfo = {
+    'Petualangan Sahabat': {
+      'Penulis': 'Angela Gunning',
+      'Penerbit': 'Pustaka Utama',
+      'Tahun Terbit': '2018',
+      'Jumlah': '6',
+      'Kategori': 'Petualangan'
+    },
+    'Mystery of the Moon': {
+      'Penulis': 'Marsella Anggit',
+      'Penerbit': 'Media Mega Utama',
+      'Tahun Terbit': '2020',
+      'Jumlah': '4',
+      'Kategori': 'Misteri'
+    },
+    'Magic of the Amazing Forest': {
+      'Penulis': 'Ali baskara',
+      'Penerbit': 'Argantara media',
+      'Tahun Terbit': '2019',
+      'Jumlah': '5',
+      'Kategori': 'Fantasi'
+    },
+    'The Adventure Begins': {
+      'Penulis': 'Cika Mahira',
+      'Penerbit': 'Media Nusantara',
+      'Tahun Terbit': '2017',
+      'Jumlah': '3',
+      'Kategori': 'Petualangan'
+    },
+    'Put The Petal To The Metal': {
+      'Penulis': 'Jojo Alfito',
+      'Penerbit': 'Sobat Media Nusantara',
+      'Tahun Terbit': '2015',
+      'Jumlah': '7',
+      'Kategori': 'Fiksi'
+    },
+    'In the Shadows Monster': {
+      'Penulis': 'Vena Erika',
+      'Penerbit': 'Media Merdeka',
+      'Tahun Terbit': '2021',
+      'Jumlah': '2',
+      'Kategori': 'Horor'
+    },
   };
 
   bool readMore = false;
+  bool isFavorite = false;
   TextEditingController commentController = TextEditingController();
   List<Widget> commentCards = List.generate(
     5,
@@ -51,11 +88,11 @@ class _DetailPageState extends State<DetailPage> {
           radius: 20,
         ),
         title: Text(
-          'Username $index',
+          'Book $index',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          'Bukunya menarik dan cukup memotivasi, saya juga belajar cukup banyak hal-hal baru.',
+          'Buku ini sangat menarik dan cukup memotivasi, saya juga belajar cukup banyak hal-hal baru.',
         ),
       ),
     ),
@@ -64,11 +101,23 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     String text = bookDescriptions[widget.bookTitle] ?? '';
-    String category = bookCategories[widget.bookTitle] ?? '';
+    Map<String, String> info = bookInfo[widget.bookTitle] ?? {};
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Detail Buku'),
+        actions: [
+          IconButton(
+            icon:
+                isFavorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+            onPressed: () {
+              // Logika untuk menambahkan atau menghapus buku dari favorit
+              setState(() {
+                isFavorite = !isFavorite;
+              });
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -109,21 +158,10 @@ class _DetailPageState extends State<DetailPage> {
                         Text(
                           widget.bookTitle,
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          'By: Angela Gunning',
-                          style: TextStyle(fontSize: 10, color: Colors.grey),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Kategori: $category',
-                          style: TextStyle(fontSize: 10, color: Colors.grey),
-                        ),
-                        SizedBox(height: 8),
                         SizedBox(height: 8),
                         // Tambahan: Rating
                         Row(
@@ -151,21 +189,21 @@ class _DetailPageState extends State<DetailPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => FormPinjamPage(),
+                                builder: (context) =>
+                                    FormPinjamPage(bookImage: widget.bookImage),
                               ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 40, vertical: 10),
-                            backgroundColor:
-                                readMore ? Colors.grey : Color(0xffC25B4A),
+                            backgroundColor: Color(0xffC25B4A),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                           child: Text(
-                            readMore ? 'Dipinjam' : 'Pinjam Buku',
+                            'Pinjam Buku',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -191,6 +229,28 @@ class _DetailPageState extends State<DetailPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+              // SizedBox(height: 16),
+              SizedBox(height: 8),
+              Text(
+                'Penulis           : ${info['Penulis'] ?? ''}',
+                style: TextStyle(fontSize: 15, color: Colors.grey),
+              ),
+              Text(
+                'Penerbit         : ${info['Penerbit'] ?? ''}',
+                style: TextStyle(fontSize: 15, color: Colors.grey),
+              ),
+              Text(
+                'Tahun Terbit  : ${info['Tahun Terbit'] ?? ''}',
+                style: TextStyle(fontSize: 15, color: Colors.grey),
+              ),
+              Text(
+                'Jumlah           : ${info['Jumlah'] ?? ''}',
+                style: TextStyle(fontSize: 15, color: Colors.grey),
+              ),
+              Text(
+                'Kategori         : ${info['Kategori'] ?? ''}',
+                style: TextStyle(fontSize: 15, color: Colors.grey),
               ),
 
               SizedBox(height: 16),

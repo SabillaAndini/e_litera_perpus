@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Map<String, String> bookImagesMap = {
-    'Help Me Find My Stomach': 'assets/buku_1.png',
+    'Petualangan Sahabat': 'assets/buku_1.png',
     'The Adventure Begins': 'assets/buku_2.png',
     'Mystery of the Moon': 'assets/buku_3.png',
     'Magic of the Amazing Forest': 'assets/buku_4.png',
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   List<int> bookRatings = [4, 3, 4, 4, 4, 4];
 
   static List<String> bookTitles = [
-    'Help Me Find My Stomach',
+    'Petualangan Sahabat',
     'The Adventure Begins',
     'Mystery of the Moon',
     'Magic of the Amazing Forest',

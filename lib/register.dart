@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:e_litera_perpus/login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import 'user_data.dart';
 
 // import 'homepage.dart';
 
@@ -16,42 +20,51 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _longnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Menyambungkan API register/daftar
-  Future<void> register() async {
-    Uri url = Uri.parse('http://127.0.0.1:8000/api/auth/register');
+
+  bool _isObscurePassword = true;
+  bool _isObscureConfirmPassword = true;
+
+  Future<void> register(String method, Map<String, dynamic> mydata) async {
+    Uri url = Uri.parse('http://10.0.2.2:8000/api/auth/register');
+    late http.Response response;
     try {
-      final response = await http.post(
+      final requestBody = {
+        'email': mydata['email'],
+        'username': mydata['username'],
+        'long_name': mydata['longname'],
+        'telp': mydata['phone'],
+        'password': mydata['password'],
+        'password_confirmation': mydata['password_confirmation'],
+      };
+
+      response = await http.post(
         url,
-        body: {
-          'name': _usernameController.text,
-          'email': _emailController.text,
-          'phone': _phoneController.text,
-          'password': _passwordController.text,
-          'password_confirmation': _confirmPasswordController.text,
-        },
+        body: json.encode(requestBody),
+        headers: {'Content-Type': 'application/json'},
       );
+
       if (response.statusCode == 200) {
         // Registrasi berhasil
-        final data = response.body;
+        final data = json.decode(response.body);
         // Lakukan sesuatu dengan data
         print(data);
       } else {
         // jika gagal melakukan registrasi
-        throw Exception('Failed to register');
+        throw Exception('gagal melakukan pendaftaran');
       }
     } catch (e) {
       // menangani error yang terjadi
       print(e);
+      print(response.body);
     }
   }
-
-  bool _isObscurePassword = true;
-  bool _isObscureConfirmPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +170,25 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
+                  controller: _addressController,
+                  decoration: InputDecoration(
+                    hintText: "Alamat",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide.none),
+                    fillColor: Color(0xffC25B4A).withOpacity(0.1),
+                    filled: true,
+                    prefixIcon: const Icon(Icons.home),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Alamat harus diisi';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
                   controller: _passwordController,
                   obscureText: _isObscurePassword,
                   decoration: InputDecoration(
@@ -221,8 +253,23 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
+                    UserData.username = _usernameController.text;
+                    UserData.longname = _longnameController.text;
+                    UserData.email = _emailController.text;
+                    UserData.phone = _phoneController.text;
+                    UserData.address = _addressController.text;
+                    UserData.password = _passwordController.text;
+                    UserData.confirmPassword = _confirmPasswordController.text;
                     if (_formKey.currentState!.validate()) {
-                      register(); // Panggil method register() di sini
+                      register('POST', {
+                        'username': _usernameController.text,
+                        'longname': _longnameController.text,
+                        'email': _emailController.text,
+                        'phone': _phoneController.text,
+                        'addres': _addressController.text,
+                        'password': _passwordController.text,
+                        'password_confirmation': _confirmPasswordController.text
+                      }); // Panggil method register() di sini
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),
@@ -231,7 +278,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                   child: const Text(
                     "Daftar",
-                    style: TextStyle(fontSize: 12, color: Colors.white),
+                    style: TextStyle(fontSize: 15, color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),

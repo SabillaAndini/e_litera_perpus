@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +7,8 @@ import 'favorit.dart';
 import 'homepage.dart';
 import 'notifikasi.dart';
 import 'pinjam.dart';
+import 'user_data.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -15,6 +18,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+
   int _selectedIndex = 4;
   File? _selectedImage;
   bool _isImageSelected = false;
@@ -127,10 +135,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  Text('Natalia Dita'),
-                  Text('nataliadita@gmail.com'),
-                  Text('0812345678'),
-                  Text('Jl. Bunga Tulip no 5'),
+                  Text(UserData.username),
+                  Text(UserData.email),
+                  Text(UserData.phone),
+                  Text(UserData.address),
                   SizedBox(height: 20),
                   Visibility(
                     visible: !_isEditing,
@@ -158,24 +166,25 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         SizedBox(height: 20),
                         TextField(
+                          controller: _usernameController,
                           decoration: InputDecoration(
                             labelText: 'Nama',
                           ),
                         ),
-                        SizedBox(height: 10),
                         TextField(
+                          controller: _emailController,
                           decoration: InputDecoration(
                             labelText: 'Email',
                           ),
                         ),
-                        SizedBox(height: 10),
                         TextField(
+                          controller: _phoneController,
                           decoration: InputDecoration(
                             labelText: 'Nomor Telepon',
                           ),
                         ),
-                        SizedBox(height: 10),
                         TextField(
+                          controller: _addressController,
                           decoration: InputDecoration(
                             labelText: 'Alamat',
                           ),
@@ -200,7 +209,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                // Simpan perubahan profil
+                                UserData.username = _usernameController.text;
+                                UserData.email = _emailController.text;
+                                UserData.phone = _phoneController.text;
+                                UserData.address = _addressController.text;
                                 setState(() {
                                   _isEditing = false;
                                 });

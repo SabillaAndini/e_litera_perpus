@@ -30,11 +30,7 @@ class _BottomNavigationBarExampleState
     extends State<BottomNavigationBarExample> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    LoginPage(),
-    HomePage(),
-    FavoritPage()
-  ];
+  final List<Widget> _pages = [LoginPage(), HomePage(), FavoritPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -61,5 +57,3 @@ class _BottomNavigationBarExampleState
     );
   }
 }
-
-

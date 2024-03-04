@@ -316,8 +316,10 @@ class _PinjamPageState extends State<PinjamPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => FormPinjamPage()),
-                                ); // Logika untuk pengembalian buku
+                                      builder: (context) => FormPinjamPage(
+                                            bookImage: bookImages[index],
+                                          )),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xffC25B4A),

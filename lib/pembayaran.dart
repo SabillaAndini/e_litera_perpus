@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:midpay/midpay.dart';
 
 class MetodePembayaranPage extends StatefulWidget {
   const MetodePembayaranPage({Key? key}) : super(key: key);
@@ -67,6 +69,9 @@ class _MetodePembayaranPageState extends State<MetodePembayaranPage> {
     ],
   ];
 
+  int _selectedMetode =
+      -1; // untuk menyimpan indeks metode pembayaran yang dipilih
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,7 +129,7 @@ class _MetodePembayaranPageState extends State<MetodePembayaranPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 Text(
-                  'Rp. 10.000',
+                  'Rp. 4.000',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 Row(
@@ -180,17 +185,37 @@ class _MetodePembayaranPageState extends State<MetodePembayaranPage> {
                             );
                           },
                         ),
+                        SizedBox(
+                            height:
+                                8), // tambahkan jarak antara gambar barcode dan gambar di atasnya
+                        Visibility(
+                          visible: _selectedMetode ==
+                              index, // hanya tampilkan gambar barcode jika metode dipilih
+                          child: Center(
+                            // letakkan gambar barcode di tengah
+                            child: Image.asset(
+                              'assets/barcode.png', // ganti dengan asset gambar barcode Anda
+                              width: 100, // sesuaikan ukuran gambar barcode
+                              height: 100,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
+
                     trailing: Icon(Icons
                         .keyboard_arrow_right), // Menambahkan ikon keyboard_arrow_right di sebelah kanan
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              'Metode Pembayaran: ${metodePembayaran[index]}'),
-                        ),
-                      );
+                      setState(() {
+                        _selectedMetode = index; // atur metode yang dipilih
+                      });
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   SnackBar(
+                      //     content: Text(
+                      //         'Metode Pembayaran: ${metodePembayaran[index]}'),
+                      //   ),
+                      // );
+                      // _testPayment();
                     },
                   ),
                 );

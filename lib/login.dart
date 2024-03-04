@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'package:e_litera_perpus/homepage.dart';
 import 'package:e_litera_perpus/register.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import 'userData.dart';
 
 class BottomNavigationBarExample extends StatefulWidget {
   @override
@@ -50,21 +53,28 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // fungsi untuk menyambungkan API
-  Future<void> login() async {
-    Uri url = Uri.parse('http://127.0.0.1:8000/api/auth/login-mobile');
+  Future<void> login(String method, Map<String, dynamic> mydata) async {
+    Uri url = Uri.parse('http://10.0.2.2:8000/api/login-mobile');
+    late http.Response response;
     try {
-      final response = await http.post(
+      if (!mydata.containsKey('email') || !mydata.containsKey('password')) {
+        throw Exception('Missing email or password in the data');
+      }
+
+      response = await http.post(
         url,
-        body: {
-          'email': _usernameController.text,
-          'password': _passwordController.text,
-        },
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'email': mydata['email'],
+          'password': mydata['password'],
+        }),
       );
+
       if (response.statusCode == 200) {
         // respon jika login berhasil
         final data = response.body;
@@ -77,6 +87,9 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       // Handle error/permasalahan yang terjadi
       print(e);
+      if (response != null) {
+        print(response.body);
+      }
     }
   }
 
@@ -118,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                   Column(
                     children: <Widget>[
                       TextFormField(
-                        controller: _usernameController,
+                        controller: _emailController,
                         decoration: InputDecoration(
                           hintText: "Nama Pengguna atau Email",
                           border: OutlineInputBorder(
@@ -146,8 +159,13 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.only(top: 3, left: 3),
                       child: ElevatedButton(
                         onPressed: () {
+                          UserData.email = _emailController.text;
+                          UserData.password = _passwordController.text;
                           if (_formKey.currentState!.validate()) {
-                            login(); // Panggil method login() di sini
+                            login('POST', {
+                              'email': _emailController.text,
+                              'password': _passwordController.text
+                            }); // Panggil method login() di sini
                             Navigator.push(
                               context,
                               MaterialPageRoute(

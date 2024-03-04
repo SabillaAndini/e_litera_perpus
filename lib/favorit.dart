@@ -76,6 +76,10 @@ class _FavoritPageState extends State<FavoritPage> {
           padding: const EdgeInsets.symmetric(horizontal: 30),
           itemCount: bookTitles.length,
           itemBuilder: (ctx, i) {
+            if (isFavorite[i]) {
+              return SizedBox.shrink(); // Mengabaikan card yang di-favoritkan
+            }
+
             int rating = bookRatings[i % bookRatings.length];
             String bookTitle = bookTitles[i % bookTitles.length];
             String bookImage =
